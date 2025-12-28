@@ -1,0 +1,5 @@
+/* Estilos específicos do componente de placar de números sorteados */
+
+:host {
+  display: block;
+}

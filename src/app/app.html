@@ -29,8 +29,11 @@
       [numeroMaximoSelecionado]="numeroMaximoEmModal()"
       (novoJogo)="aoNovoJogo($event)"
       (gerarNumero)="aoGerarNumero()"
-      (salvarJogo)="aoSalvarJogo()"
     ></app-bingo-controls>
+
+    <app-numbers-scoreboard
+      [numerosSelecionados]="estadoJogo().numerosSelecionados"
+    ></app-numbers-scoreboard>
 
     <app-bingo-board
       [numeros]="estadoJogo().numeros"

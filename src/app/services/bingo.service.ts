@@ -53,7 +53,10 @@ export class BingoService {
     }
 
     // Gera array de números de 1 até numeroMaximo
-    const numeros = Array.from({ length: numeroMaximo }, (_, i) => i + 1);
+    let numeros = Array.from({ length: numeroMaximo }, (_, i) => i + 1);
+
+    // Reorganiza os números em formato de coluna para o bingo
+    numeros = this.organizarNumerosEmColunaBingo(numeros);
 
     this.estadoJogo.set({
       numeroMaximo,
@@ -154,6 +157,37 @@ export class BingoService {
       estado.numeroMaximo >= 5 &&
       estado.numeroMaximo <= 120
     );
+  }
+
+  /**
+   * Reorganiza os números em formato de coluna para o Bingo
+   * Transforma um array linear em um array organizado por colunas
+   * Exemplo: [1..15] -> [1, 4, 7, 10, 13, 2, 5, 8, 11, 14, 3, 6, 9, 12, 15]
+   * 
+   * No Bingo, cada coluna tem numeroMaximo/5 números.
+   * Esta função reorganiza os números para que quando exibidos em 5 colunas,
+   * apareçam na ordem correta: primeira linha tem o 1º número de cada coluna,
+   * segunda linha tem o 2º número de cada coluna, etc.
+   * 
+   * @param numeros Array de números ordenados sequencialmente
+   * @returns Array de números reorganizado em formato de coluna
+   */
+  private organizarNumerosEmColunaBingo(numeros: number[]): number[] {
+    const totalNumeros = numeros.length;
+    const numerosPerColuna = totalNumeros / 5; // 5 colunas para BINGO
+    const resultado: number[] = [];
+
+    // Para cada linha (número dentro de cada coluna)
+    for (let linha = 0; linha < numerosPerColuna; linha++) {
+      // Para cada coluna
+      for (let coluna = 0; coluna < 5; coluna++) {
+        // Calcula o índice no array original
+        const indiceOriginal = coluna * numerosPerColuna + linha;
+        resultado.push(numeros[indiceOriginal]);
+      }
+    }
+
+    return resultado;
   }
 
   /**

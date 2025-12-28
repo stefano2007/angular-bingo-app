@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+﻿import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 /**
  * Componente responsável pelos controles do jogo
- * Contém botões para novo jogo, gerar número e salvar
+ * Contém botões para novo jogo e gerar/sortear número
  */
 @Component({
   selector: 'app-bingo-controls',
@@ -49,11 +49,6 @@ export class BingoControlsComponent {
   @Output() gerarNumero = new EventEmitter<void>();
 
   /**
-   * Evento emitido quando o usuário deseja salvar o jogo
-   */
-  @Output() salvarJogo = new EventEmitter<void>();
-
-  /**
    * Opções disponíveis para o número máximo (múltiplos de 5)
    */
   readonly opcoesNumeroMaximo: number[] = [75, 80, 85, 90, 95, 100, 105, 110, 115, 120];
@@ -73,13 +68,6 @@ export class BingoControlsComponent {
   }
 
   /**
-   * Emite evento para salvar jogo
-   */
-  aoSalvarJogo(): void {
-    this.salvarJogo.emit();
-  }
-
-  /**
    * Verifica se ainda há números disponíveis para gerar
    */
   get podeGerarNumero(): boolean {
@@ -94,5 +82,3 @@ export class BingoControlsComponent {
     return Math.round((this.quantidadeSelecionados / this.totalNumeros) * 100);
   }
 }
-
-

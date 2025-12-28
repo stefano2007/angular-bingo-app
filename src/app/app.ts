@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BingoService } from './services/bingo.service';
 import { BingoBoardComponent } from './components/bingo-board/bingo-board.component';
 import { BingoControlsComponent } from './components/bingo-controls/bingo-controls.component';
+import { NumbersScoreboardComponent } from './components/numbers-scoreboard/numbers-scoreboard.component';
 
 /**
  * Componente principal da aplicação
@@ -12,7 +13,7 @@ import { BingoControlsComponent } from './components/bingo-controls/bingo-contro
  */
 @Component({
   selector: 'app-root',
-  imports: [BingoBoardComponent, BingoControlsComponent, CommonModule, FormsModule],
+  imports: [BingoBoardComponent, BingoControlsComponent, NumbersScoreboardComponent, CommonModule, FormsModule],
   templateUrl: './app.html'
 })
 export class App {
