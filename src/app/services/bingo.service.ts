@@ -4,11 +4,11 @@ import { isPlatformBrowser } from '@angular/common';
 /**
  * Interface para o estado do jogo
  */
-export interface BingoGameState {
-  maxNumber: number;
-  numbers: number[];
-  selectedNumbers: number[];
-  currentNumber: number | null;
+export interface EstadoJogoBingo {
+  numeroMaximo: number;
+  numeros: number[];
+  numerosSelecionados: number[];
+  numeroAtual: number | null;
 }
 
 /**
@@ -18,96 +18,96 @@ export interface BingoGameState {
   providedIn: 'root'
 })
 export class BingoService {
-  private readonly STORAGE_KEY = 'bingo-game-state';
-  private readonly platformId = inject(PLATFORM_ID);
+  private readonly CHAVE_STORAGE = 'bingo-game-state';
+  private readonly idPlataforma = inject(PLATFORM_ID);
 
   // Estado do jogo usando signals
-  private gameState = signal<BingoGameState>({
-    maxNumber: 75,
-    numbers: [],
-    selectedNumbers: [],
-    currentNumber: null
+  private estadoJogo = signal<EstadoJogoBingo>({
+    numeroMaximo: 75,
+    numeros: [],
+    numerosSelecionados: [],
+    numeroAtual: null
   });
 
   // Expor o estado como signal readonly
-  readonly state = this.gameState.asReadonly();
+  readonly estado = this.estadoJogo.asReadonly();
 
   constructor() {
     // Tenta carregar jogo salvo ao inicializar (apenas no browser)
-    if (isPlatformBrowser(this.platformId)) {
-      this.loadGame();
+    if (isPlatformBrowser(this.idPlataforma)) {
+      this.carregarJogo();
     } else {
       // No servidor, apenas inicia um novo jogo sem tentar carregar
-      this.startNewGame(75);
+      this.iniciarNovoJogo(75);
     }
   }
 
   /**
    * Inicializa um novo jogo com o número máximo especificado
-   * @param maxNumber Número máximo do jogo (deve ser múltiplo de 5)
+   * @param numeroMaximo Número máximo do jogo (deve ser múltiplo de 5)
    */
-  startNewGame(maxNumber: number = 75): void {
-    // Garante que maxNumber seja múltiplo de 5
-    if (maxNumber % 5 !== 0) {
-      maxNumber = Math.ceil(maxNumber / 5) * 5;
+  iniciarNovoJogo(numeroMaximo: number = 75): void {
+    // Garante que numeroMaximo seja múltiplo de 5
+    if (numeroMaximo % 5 !== 0) {
+      numeroMaximo = Math.ceil(numeroMaximo / 5) * 5;
     }
 
-    // Gera array de números de 1 até maxNumber
-    const numbers = Array.from({ length: maxNumber }, (_, i) => i + 1);
+    // Gera array de números de 1 até numeroMaximo
+    const numeros = Array.from({ length: numeroMaximo }, (_, i) => i + 1);
 
-    this.gameState.set({
-      maxNumber,
-      numbers: numbers,
-      selectedNumbers: [],
-      currentNumber: null
+    this.estadoJogo.set({
+      numeroMaximo,
+      numeros: numeros,
+      numerosSelecionados: [],
+      numeroAtual: null
     });
 
     // Remove jogo salvo ao iniciar novo jogo
-    this.clearSavedGame();
+    this.limparJogoSalvo();
   }
 
   /**
    * Gera um número aleatório ainda não selecionado
    * @returns Número gerado ou null se todos já foram selecionados
    */
-  generateNumber(): number | null {
-    const state = this.gameState();
-    const availableNumbers = state.numbers.filter(
-      num => !state.selectedNumbers.includes(num)
+  gerarNumero(): number | null {
+    const estado = this.estadoJogo();
+    const numerosDisponiveis = estado.numeros.filter(
+      num => !estado.numerosSelecionados.includes(num)
     );
 
-    if (availableNumbers.length === 0) {
+    if (numerosDisponiveis.length === 0) {
       return null; // Todos os números já foram selecionados
     }
 
     // Seleciona um número aleatório dos disponíveis
-    const randomIndex = Math.floor(Math.random() * availableNumbers.length);
-    const selectedNumber = availableNumbers[randomIndex];
+    const indiceAleatorio = Math.floor(Math.random() * numerosDisponiveis.length);
+    const numeroSelecionado = numerosDisponiveis[indiceAleatorio];
 
     // Atualiza o estado
-    this.gameState.set({
-      ...state,
-      selectedNumbers: [...state.selectedNumbers, selectedNumber],
-      currentNumber: selectedNumber
+    this.estadoJogo.set({
+      ...estado,
+      numerosSelecionados: [...estado.numerosSelecionados, numeroSelecionado],
+      numeroAtual: numeroSelecionado
     });
 
     // Salva automaticamente após gerar número
-    this.saveGame();
+    this.salvarJogo();
 
-    return selectedNumber;
+    return numeroSelecionado;
   }
 
   /**
    * Salva o estado atual do jogo no LocalStorage
    */
-  saveGame(): void {
-    if (!isPlatformBrowser(this.platformId)) {
+  salvarJogo(): void {
+    if (!isPlatformBrowser(this.idPlataforma)) {
       return; // Não salva no servidor
     }
 
     try {
-      const state = this.gameState();
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state));
+      const estado = this.estadoJogo();
+      localStorage.setItem(this.CHAVE_STORAGE, JSON.stringify(estado));
     } catch (error) {
       console.error('Erro ao salvar jogo:', error);
     }
@@ -116,20 +116,20 @@ export class BingoService {
   /**
    * Carrega o jogo salvo do LocalStorage
    */
-  loadGame(): void {
-    if (!isPlatformBrowser(this.platformId)) {
+  carregarJogo(): void {
+    if (!isPlatformBrowser(this.idPlataforma)) {
       // No servidor, apenas inicia um novo jogo
-      this.startNewGame(75);
+      this.iniciarNovoJogo(75);
       return;
     }
 
     try {
-      const savedState = localStorage.getItem(this.STORAGE_KEY);
-      if (savedState) {
-        const parsedState: BingoGameState = JSON.parse(savedState);
+      const estadoSalvo = localStorage.getItem(this.CHAVE_STORAGE);
+      if (estadoSalvo) {
+        const estadoParseado: EstadoJogoBingo = JSON.parse(estadoSalvo);
         // Valida o estado antes de aplicar
-        if (this.isValidState(parsedState)) {
-          this.gameState.set(parsedState);
+        if (this.estadoValido(estadoParseado)) {
+          this.estadoJogo.set(estadoParseado);
           return;
         }
       }
@@ -138,34 +138,34 @@ export class BingoService {
     }
 
     // Se não houver jogo salvo ou houver erro, inicia novo jogo
-    this.startNewGame(75);
+    this.iniciarNovoJogo(75);
   }
 
   /**
    * Verifica se o estado salvo é válido
    */
-  private isValidState(state: any): state is BingoGameState {
+  private estadoValido(estado: any): estado is EstadoJogoBingo {
     return (
-      state &&
-      typeof state.maxNumber === 'number' &&
-      Array.isArray(state.numbers) &&
-      Array.isArray(state.selectedNumbers) &&
-      state.maxNumber % 5 === 0 &&
-      state.maxNumber >= 5 &&
-      state.maxNumber <= 120
+      estado &&
+      typeof estado.numeroMaximo === 'number' &&
+      Array.isArray(estado.numeros) &&
+      Array.isArray(estado.numerosSelecionados) &&
+      estado.numeroMaximo % 5 === 0 &&
+      estado.numeroMaximo >= 5 &&
+      estado.numeroMaximo <= 120
     );
   }
 
   /**
    * Limpa o jogo salvo do LocalStorage
    */
-  private clearSavedGame(): void {
-    if (!isPlatformBrowser(this.platformId)) {
+  private limparJogoSalvo(): void {
+    if (!isPlatformBrowser(this.idPlataforma)) {
       return; // Não limpa no servidor
     }
 
     try {
-      localStorage.removeItem(this.STORAGE_KEY);
+      localStorage.removeItem(this.CHAVE_STORAGE);
     } catch (error) {
       console.error('Erro ao limpar jogo salvo:', error);
     }

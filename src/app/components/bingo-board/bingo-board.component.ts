@@ -15,42 +15,42 @@ export class BingoBoardComponent {
   /**
    * Array de números do jogo (embaralhados)
    */
-  @Input() numbers: number[] = [];
+  @Input() numeros: number[] = [];
 
   /**
    * Array de números já selecionados
    */
-  @Input() selectedNumbers: number[] = [];
+  @Input() numerosSelecionados: number[] = [];
 
   /**
    * Organiza os números em colunas para exibição
    * Cada coluna representa uma letra de BINGO (5 colunas)
    * @returns Array de arrays, onde cada array interno representa uma coluna
    */
-  getColumns(): number[][] {
-    const columns: number[][] = [[], [], [], [], []];
+  obterColunas(): number[][] {
+    const colunas: number[][] = [[], [], [], [], []];
     
-    this.numbers.forEach((num, index) => {
-      const columnIndex = index % 5;
-      columns[columnIndex].push(num);
+    this.numeros.forEach((num, indice) => {
+      const indiceColuna = indice % 5;
+      colunas[indiceColuna].push(num);
     });
 
-    return columns;
+    return colunas;
   }
 
   /**
    * Verifica se um número foi selecionado
-   * @param number Número a ser verificado
+   * @param numero Número a ser verificado
    * @returns true se o número foi selecionado
    */
-  isSelected(number: number): boolean {
-    return this.selectedNumbers.includes(number);
+  estaSelecionado(numero: number): boolean {
+    return this.numerosSelecionados.includes(numero);
   }
 
   /**
    * Retorna as letras de BINGO para o cabeçalho
    */
-  getLetters(): string[] {
+  obterLetras(): string[] {
     return ['B', 'I', 'N', 'G', 'O'];
   }
 }
