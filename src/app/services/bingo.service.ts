@@ -45,8 +45,9 @@ export class BingoService {
   /**
    * Inicializa um novo jogo com o número máximo especificado
    * @param numeroMaximo Número máximo do jogo (deve ser múltiplo de 5)
+   * @param limparHistorico Se true, remove o jogo salvo. Se false, apenas atualiza o estado
    */
-  iniciarNovoJogo(numeroMaximo: number = 75): void {
+  iniciarNovoJogo(numeroMaximo: number = 75, limparHistorico: boolean = true): void {
     // Garante que numeroMaximo seja múltiplo de 5
     if (numeroMaximo % 5 !== 0) {
       numeroMaximo = Math.ceil(numeroMaximo / 5) * 5;
@@ -65,8 +66,10 @@ export class BingoService {
       numeroAtual: null
     });
 
-    // Remove jogo salvo ao iniciar novo jogo
-    this.limparJogoSalvo();
+    // Remove jogo salvo apenas se o parâmetro indicar (ao iniciar novo jogo via modal)
+    if (limparHistorico) {
+      this.limparJogoSalvo();
+    }
   }
 
   /**
@@ -163,12 +166,12 @@ export class BingoService {
    * Reorganiza os números em formato de coluna para o Bingo
    * Transforma um array linear em um array organizado por colunas
    * Exemplo: [1..15] -> [1, 4, 7, 10, 13, 2, 5, 8, 11, 14, 3, 6, 9, 12, 15]
-   * 
+   *
    * No Bingo, cada coluna tem numeroMaximo/5 números.
    * Esta função reorganiza os números para que quando exibidos em 5 colunas,
    * apareçam na ordem correta: primeira linha tem o 1º número de cada coluna,
    * segunda linha tem o 2º número de cada coluna, etc.
-   * 
+   *
    * @param numeros Array de números ordenados sequencialmente
    * @returns Array de números reorganizado em formato de coluna
    */

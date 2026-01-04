@@ -1,6 +1,7 @@
 ﻿import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NUMEROS_MAXIMOS_VALIDOS } from '../../config/bingo.config';
 
 /**
  * Componente responsável pelos controles do jogo
@@ -51,7 +52,7 @@ export class BingoControlsComponent {
   /**
    * Opções disponíveis para o número máximo (múltiplos de 5)
    */
-  readonly opcoesNumeroMaximo: number[] = [75, 80, 85, 90, 95, 100, 105, 110, 115, 120];
+  readonly opcoesNumeroMaximo = NUMEROS_MAXIMOS_VALIDOS;
 
   /**
    * Emite evento para iniciar novo jogo usando o numeroMaximoSelecionado

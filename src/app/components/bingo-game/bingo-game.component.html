@@ -1,0 +1,59 @@
+<app-bingo-controls
+  [numeroMaximo]="estadoJogo().numeroMaximo"
+  [numeroAtual]="estadoJogo().numeroAtual"
+  [quantidadeSelecionados]="estadoJogo().numerosSelecionados.length"
+  [totalNumeros]="estadoJogo().numeroMaximo"
+  [numeroMaximoSelecionado]="numeroMaximoEmModal()"
+  (novoJogo)="aoNovoJogo($event)"
+  (gerarNumero)="aoGerarNumero()"
+></app-bingo-controls>
+
+<app-numbers-scoreboard
+  [numerosSelecionados]="estadoJogo().numerosSelecionados"
+></app-numbers-scoreboard>
+
+<app-bingo-board
+  [numeros]="estadoJogo().numeros"
+  [numerosSelecionados]="estadoJogo().numerosSelecionados"
+></app-bingo-board>
+
+<!-- Modal para novo jogo -->
+@if (mostrarModalNovoJogo()) {
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 max-w-md w-full">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Iniciar Novo Jogo</h2>
+      <p class="text-gray-600 dark:text-gray-400 mb-6">Escolha o número máximo para o novo jogo:</p>
+
+      <div class="flex flex-col gap-2 mb-6">
+        <label for="numeroMaximoModal" class="text-sm font-medium text-gray-700 dark:text-gray-300">Número Máximo:</label>
+        <select
+          id="numeroMaximoModal"
+          [ngModel]="numeroMaximoEmModal()"
+          (ngModelChange)="numeroMaximoEmModal.set($event)"
+          class="p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800"
+        >
+        @for (item of NUMEROS_MAXIMOS_VALIDOS; track item) {
+          <option [value]="item">{{ item }}</option>
+        }
+        </select>
+      </div>
+
+      <div class="flex gap-3">
+        <button
+          (click)="cancelarModalNovoJogo()"
+          class="flex-1 px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-base font-semibold cursor-pointer transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-600"
+          type="button"
+        >
+          Cancelar
+        </button>
+        <button
+          (click)="confirmarNovoJogoModal(numeroMaximoEmModal())"
+          class="flex-1 px-4 py-3 border-none rounded-lg text-base font-semibold cursor-pointer transition-all shadow-md bg-linear-to-br from-indigo-500 to-purple-600 dark:from-indigo-600 dark:to-purple-700 text-white hover:-translate-y-0.5 hover:shadow-lg"
+          type="button"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+}

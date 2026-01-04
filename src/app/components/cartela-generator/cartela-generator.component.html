@@ -1,0 +1,109 @@
+<div class="w-full">
+  <!-- Formulário de Geração -->
+  <div class="flex flex-col gap-6 print:hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Gerar Cartelas</h2>
+      <p class="text-gray-600 dark:text-gray-400 mb-6">Preencha os dados para gerar suas cartelas de bingo:</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Nome do Bingo -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Nome do Bingo
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="bingoName"
+            placeholder="ex: BINGO"
+            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800"
+          />
+        </div>
+
+        <!-- Número Máximo -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Número Máximo
+          </label>
+          <select
+            [value]="numeroMaximo()"
+            (change)="onNumeroMaximoChange($event)"
+            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800"
+          >
+            @for (numero of numerosMaximosValidos; track numero) {
+              <option [value]="numero">{{ numero }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Quantidade -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Quantidade de Cartelas
+          </label>
+          <input
+            type="number"
+            [(ngModel)]="quantidade"
+            min="1"
+            max="500"
+            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800"
+          />
+        </div>
+
+        <!-- URL da Imagem -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            URL da Imagem (opcional)
+          </label>
+          <input
+            type="url"
+            [(ngModel)]="imageUrl"
+            placeholder="https://exemplo.com/imagem.jpg"
+            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800"
+          />
+        </div>
+      </div>
+
+      <!-- Botões -->
+      <div class="flex gap-3 mt-6">
+        <button
+          (click)="gerarCartelas()"
+          class="flex-1 px-4 py-3 border-none rounded-lg text-base font-semibold cursor-pointer transition-all shadow-md bg-linear-to-br from-indigo-500 to-purple-600 dark:from-indigo-600 dark:to-purple-700 text-white hover:-translate-y-0.5 hover:shadow-lg"
+        >
+          Gerar {{ quantidade() }} Cartelas
+        </button>
+        <a
+          routerLink="/"
+          class="flex-1 px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-base font-semibold cursor-pointer transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-600 text-center"
+        >
+          Voltar ao Jogo
+        </a>
+      </div>
+    </div>
+  </div>
+
+  @if(cartelas().length > 0) {
+    <div class="flex my-3 gap-3 flex-wrap print:hidden">
+      <button
+        (click)="imprimir()"
+        class="flex-1 min-w-40 px-6 py-3 bg-linear-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-lg transition-all duration-200 shadow-md"
+      >
+        Imprimir
+      </button>
+    </div>
+    <div class="print-container">
+      <div class="grid grid-cols-2 gap-2 p-2">
+        @for (cartela of cartelas(); track cartela.id) {
+          <div class="cartela-print">
+            <app-bingo-card
+              [card]="cartela"
+              [bingoName]="bingoName()"
+              [imageUrl]="imageUrl()"
+            />
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</div>
+
