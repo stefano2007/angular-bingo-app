@@ -45,9 +45,7 @@ export class BingoCardComponent {
     const numeros: number[] = [];
     this.card.numbers.forEach(linha => {
       linha.forEach(numero => {
-        if (numero !== 0) {
-          numeros.push(numero);
-        }
+        numeros.push(numero);
       });
     });
 
@@ -58,13 +56,15 @@ export class BingoCardComponent {
       colunas[indiceColuna].push(num);
     });
 
+    this.ordernarColunas(colunas);
+
     // Converte de volta para linhas
     const cartelaOrganizada: number[][] = [];
     for (let linha = 0; linha < 5; linha++) {
       const novaLinha: number[] = [];
       for (let coluna = 0; coluna < 5; coluna++) {
         if (this.indexIcone(linha, coluna)) {
-          // Centro é FREE (representado por 0)
+          // Centro representa a imagem
           novaLinha.push(0);
         } else {
           novaLinha.push(colunas[coluna][linha] || 0);
@@ -80,7 +80,11 @@ export class BingoCardComponent {
     return linha === 2 && coluna === 2;
   }
 
-  get nomePadraoBingo(): string {
-    return 'FREE';
+  ordernarColunas(colunas: number[][]): number[][] {
+    return colunas.map(coluna => this.ordernarArray(coluna));
+  }
+
+  ordernarArray(arr: number[]): number[] {
+    return arr.sort((a, b) => a - b);
   }
 }

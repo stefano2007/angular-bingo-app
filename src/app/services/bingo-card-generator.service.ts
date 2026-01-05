@@ -81,7 +81,6 @@ export class BingoCardGeneratorService {
       });
     }
 
-    console.log('cartelas geradas:', cartelas);
     return cartelas;
   }
 }
