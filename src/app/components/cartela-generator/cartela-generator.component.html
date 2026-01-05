@@ -91,9 +91,9 @@
       </button>
     </div>
     <div class="print-container">
-      <div class="grid grid-cols-2 gap-2 p-2">
-        @for (cartela of cartelas(); track cartela.id) {
-          <div class="cartela-print">
+      <div class="cartelas-grid">
+        @for (cartela of cartelas(); track cartela.id; let i = $index) {
+          <div class="cartela-wrapper">
             <app-bingo-card
               [card]="cartela"
               [bingoName]="bingoName()"

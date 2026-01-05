@@ -1,33 +1,26 @@
-<div class="flex flex-col w-full h-full border border-black bg-white">
-  <!-- Header com nome do bingo -->
-  <div class="w-full border-black p-1 text-center font-bold text-sm bg-white">
-    {{ bingoName }}
-  </div>
-
-  <!-- Tabela do bingo -->
-  <table class="w-full flex-1 border-collapse text-center">
-    <tbody>
-      @if (card) {
-        @for (linha of obterCartelaOrganizada(); track $index) {
-          <tr>
-            @for (numero of linha; track $index) {
-              <td class="border border-black p-0 align-middle text-xs h-5">
-                @if (numero === 0) {
-                    <div class="flex items-center justify-center font-bold text-xs">
-                    @if (imageUrl) {
-                        <img [src]="imageUrl" alt="BINGO" class="w-full h-full object-cover" />
-                    } @else {
-                      <img src="/bingo.png" alt="BINGO" class="w-5 h-5" />
-                    }
-                    </div>
+<div class="cartela">
+  <h2 class="cartela-titulo">{{ bingoName }}</h2>
+  <div class="cartela-corpo">
+    @if (card) {
+      @for (linha of obterCartelaOrganizada(); track $index) {
+        <div class="cartela-linha">
+          @for (numero of linha; track $index) {
+            @if (numero === 0) {
+              <div class="cartela-casa cartela-casa-img">
+                @if (imageUrl) {
+                  <img [src]="imageUrl" alt="BINGO" />
                 } @else {
-                  {{ numero }}
+                  <img src="/bingo.png" alt="BINGO" />
                 }
-              </td>
+              </div>
+            } @else {
+              <div class="cartela-casa">
+                {{ numero }}
+              </div>
             }
-          </tr>
-        }
+          }
+        </div>
       }
-    </tbody>
-  </table>
+    }
+  </div>
 </div>
