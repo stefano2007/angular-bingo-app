@@ -4,8 +4,10 @@ const routes = ['/', '/cartelas'];
 
 const BASE_OUTPUT = 'dist/bingo-app/browser';
 
+const NOME_REPO_GITHUB = 'angular-bingo-app';
+
 for (const route of routes) {
-  const url = `http://localhost:4000${route}`;
+  const url = `http://localhost:4000/${NOME_REPO_GITHUB}${route}`;
   const res = await fetch(url);
   const html = await res.text();
 
