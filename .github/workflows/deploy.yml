@@ -35,10 +35,6 @@ jobs:
           PORT=4000 node dist/bingo-app/server/server.mjs &
           sleep 10
 
-      # 👉 Se falhar → servidor não subiu
-      - name: Debug server
-        run: curl http://localhost:4000
-
       # 🔥 Rodar SSG manual
       - name: Prerender pages
         run: node prerender.mjs
