@@ -37,7 +37,7 @@ jobs:
 
       # 🔥 Debug server
       - name: Debug server
-        run: curl http://localhost:4000
+        run: curl http://localhost:4000/angular-bingo-app
 
       # 🔥 Rodar SSG manual
       - name: Prerender pages
