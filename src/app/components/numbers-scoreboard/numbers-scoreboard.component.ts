@@ -13,6 +13,11 @@ import { CommonModule } from '@angular/common';
 })
 export class NumbersScoreboardComponent {
   /**
+   * Número atual selecionado
+   */
+  @Input() numeroAtual: number | null = null;
+  
+  /**
    * Array com os números já sorteados
    */
   @Input() numerosSelecionados: number[] = [];

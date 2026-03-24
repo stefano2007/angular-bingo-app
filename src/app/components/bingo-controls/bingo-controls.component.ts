@@ -65,9 +65,9 @@ export class BingoControlsComponent {
   }
 
   /**
-   * Verifica se ainda há números disponíveis para gerar
+   * Verifica se ainda há números disponíveis para sortear
    */
-  get podeGerarNumero(): boolean {
+  get podeSortearNumero(): boolean {
     return this.quantidadeSelecionados < this.totalNumeros;
   }
 
