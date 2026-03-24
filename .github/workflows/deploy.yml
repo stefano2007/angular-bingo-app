@@ -27,7 +27,7 @@ jobs:
 
       # 🔥 Build SSR
       - name: Build Angular SSR
-        run: npm run build
+        run: npm run build-github-pages
 
       # 🔥 Start SSR server
       - name: Start SSR server
