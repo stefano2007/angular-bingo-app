@@ -27,7 +27,7 @@ jobs:
 
       # 🔥 Build SSR
       - name: Build Angular SSR
-        run: ng build --base-href "/bingo-app/"
+        run: npm run build-github-pages
 
       # 🔥 Start SSR server
       - name: Start SSR server
