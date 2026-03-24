@@ -27,13 +27,17 @@ jobs:
 
       # 🔥 Build SSR
       - name: Build Angular SSR
-        run: npm run build-github-pages
+        run: npm run build
 
       # 🔥 Start SSR server
       - name: Start SSR server
         run: |
-          node dist/bingo-app/server/server.mjs &
-          sleep 5
+          PORT=4000 node dist/bingo-app/server/server.mjs &
+          sleep 10
+
+      # 👉 Se falhar → servidor não subiu
+      - name: Debug server
+        run: curl http://localhost:4000
 
       # 🔥 Rodar SSG manual
       - name: Prerender pages
