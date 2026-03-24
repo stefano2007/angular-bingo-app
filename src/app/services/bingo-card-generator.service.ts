@@ -7,14 +7,14 @@ export interface BingoCard {
 }
 
 import { Injectable } from '@angular/core';
-
+import { MAX_NUMERO_COLUNAS, MAX_NUMERO_LINHAS} from '../config/bingo.config';
 /**
  * Serviço responsável por gerar cartelas de bingo
  */
 @Injectable({
   providedIn: 'root'
 })
-export class BingoCardGeneratorService {
+export class BingoCardGeneratorService {  
   /**
    * Gera uma cartela de bingo com números aleatórios organizados por coluna
    * Cada coluna tem um intervalo específico de números
@@ -25,7 +25,7 @@ export class BingoCardGeneratorService {
    */
   private generateCard(numeroMaximo: number): number[][] {
     // Calcula os intervalos baseado no numeroMaximo
-    const intervalo = Math.floor(numeroMaximo / 5);
+    const intervalo = Math.floor(numeroMaximo / MAX_NUMERO_COLUNAS);
     const colunas = [
       this.gerarNumerosColuna(1, intervalo),
       this.gerarNumerosColuna(intervalo + 1, intervalo * 2),
@@ -35,9 +35,9 @@ export class BingoCardGeneratorService {
     ];
 
     const cartela: number[][] = [];
-    for (let linha = 0; linha < 5; linha++) {
+    for (let linha = 0; linha < MAX_NUMERO_LINHAS; linha++) {
       const novaLinha: number[] = [];
-      for (let coluna = 0; coluna < 5; coluna++) {
+      for (let coluna = 0; coluna < MAX_NUMERO_COLUNAS; coluna++) {
         novaLinha.push(colunas[coluna][linha]);
       }
       cartela.push(novaLinha);
@@ -56,7 +56,7 @@ export class BingoCardGeneratorService {
     const numeros: number[] = [];
     const disponíveis = Array.from({ length: max - min + 1 }, (_, i) => min + i);
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < MAX_NUMERO_COLUNAS; i++) {
       const indiceAleatorio = Math.floor(Math.random() * disponíveis.length);
       numeros.push(disponíveis[indiceAleatorio]);
       disponíveis.splice(indiceAleatorio, 1);
@@ -71,7 +71,7 @@ export class BingoCardGeneratorService {
    * @param numeroMaximo Número máximo para as cartelas (padrão: 75)
    * @returns Array de cartelas
    */
-  gerarCartelas(quantidade: number, numeroMaximo: number = 75): BingoCard[] {
+  gerarCartelas(quantidade: number, numeroMaximo: number): BingoCard[] {
     const cartelas: BingoCard[] = [];
 
     for (let i = 0; i < quantidade; i++) {

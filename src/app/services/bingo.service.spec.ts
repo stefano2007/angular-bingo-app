@@ -17,7 +17,7 @@ describe('BingoService', () => {
     it('should organize 15 numbers in column format correctly', () => {
       // Test com 15 números (3 linhas x 5 colunas)
       service.iniciarNovoJogo(15);
-      const estado = service.estado();
+      const estado = service.estadoSoLeitura();
       
       // Array esperado quando é iterado com obterColunas():
       // obterColunas() faz: indiceColuna = indice % 5
@@ -48,7 +48,7 @@ describe('BingoService', () => {
     it('should organize 75 numbers correctly', () => {
       // Test com 75 números (15 linhas x 5 colunas)
       service.iniciarNovoJogo(75);
-      const estado = service.estado();
+      const estado = service.estadoSoLeitura();
       
       // Verificar quantidade correta
       expect(estado.numeros.length).toBe(75);
@@ -76,7 +76,7 @@ describe('BingoService', () => {
     it('should organize 100 numbers correctly', () => {
       // Test com 100 números (20 linhas x 5 colunas)
       service.iniciarNovoJogo(100);
-      const estado = service.estado();
+      const estado = service.estadoSoLeitura();
       
       // Verificar quantidade correta
       expect(estado.numeros.length).toBe(100);

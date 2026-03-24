@@ -1,5 +1,7 @@
 import { Injectable, signal, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { LocalStorageDBService } from './localStorageDB.service';
+import { NUMERO_JOGAS_PADRAO, MAX_NUMERO_COLUNAS, MAX_NUMERO_LINHAS } from '../config/bingo.config'
 
 /**
  * Interface para o estado do jogo
@@ -18,39 +20,68 @@ export interface EstadoJogoBingo {
   providedIn: 'root'
 })
 export class BingoService {
-  private readonly CHAVE_STORAGE = 'bingo-game-state';
-  private readonly idPlataforma = inject(PLATFORM_ID);
+
+  private localStorageDBService = inject(LocalStorageDBService);
 
   // Estado do jogo usando signals
   private estadoJogo = signal<EstadoJogoBingo>({
-    numeroMaximo: 75,
+    numeroMaximo: NUMERO_JOGAS_PADRAO,
     numeros: [],
     numerosSelecionados: [],
     numeroAtual: null
   });
 
   // Expor o estado como signal readonly
-  readonly estado = this.estadoJogo.asReadonly();
+  readonly estadoSoLeitura = this.estadoJogo.asReadonly();
+
+  private readonly idPlataforma = inject(PLATFORM_ID);
 
   constructor() {
     // Tenta carregar jogo salvo ao inicializar (apenas no browser)
-    if (isPlatformBrowser(this.idPlataforma)) {
+    if (this.ehBrowser()) {
       this.carregarJogo();
     } else {
-      // No servidor, apenas inicia um novo jogo sem tentar carregar
-      this.iniciarNovoJogo(75);
+      this.novoJogoPadrao();
     }
   }
+
+  novoJogoPadrao(): void {
+    this.iniciarNovoJogo(NUMERO_JOGAS_PADRAO);
+  }
+
+  ehBrowser(): boolean {
+    return isPlatformBrowser(this.idPlataforma);
+  }
+
+  carregarJogo(): void {
+    try {
+      const estadoSalvo: EstadoJogoBingo | undefined = this.localStorageDBService.carregarJogo();
+      if (estadoSalvo) {
+        const estadoParseado: EstadoJogoBingo = estadoSalvo as EstadoJogoBingo;
+        // Valida o estado antes de aplicar
+        if (this.estadoValido(estadoParseado)) {
+          this.estadoJogo.set(estadoParseado);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar jogo:', error);
+    }
+
+    // Se não houver jogo salvo ou houver erro, inicia novo jogo
+    this.novoJogoPadrao();
+  }
+
 
   /**
    * Inicializa um novo jogo com o número máximo especificado
    * @param numeroMaximo Número máximo do jogo (deve ser múltiplo de 5)
    * @param limparHistorico Se true, remove o jogo salvo. Se false, apenas atualiza o estado
    */
-  iniciarNovoJogo(numeroMaximo: number = 75, limparHistorico: boolean = true): void {
+  iniciarNovoJogo(numeroMaximo: number, limparHistoricoLocalStorage: boolean = true): void {
     // Garante que numeroMaximo seja múltiplo de 5
-    if (numeroMaximo % 5 !== 0) {
-      numeroMaximo = Math.ceil(numeroMaximo / 5) * 5;
+    if (numeroMaximo % MAX_NUMERO_COLUNAS !== 0) {
+      numeroMaximo = Math.ceil(numeroMaximo / MAX_NUMERO_COLUNAS) * MAX_NUMERO_COLUNAS;
     }
 
     // Gera array de números de 1 até numeroMaximo
@@ -67,8 +98,8 @@ export class BingoService {
     });
 
     // Remove jogo salvo apenas se o parâmetro indicar (ao iniciar novo jogo via modal)
-    if (limparHistorico) {
-      this.limparJogoSalvo();
+    if (limparHistoricoLocalStorage && this.ehBrowser()) {
+      this.localStorageDBService.limparJogoSalvo();
     }
   }
 
@@ -98,53 +129,9 @@ export class BingoService {
     });
 
     // Salva automaticamente após gerar número
-    this.salvarJogo();
+    this.localStorageDBService.salvarJogo(this.estadoJogo());
 
     return numeroSelecionado;
-  }
-
-  /**
-   * Salva o estado atual do jogo no LocalStorage
-   */
-  salvarJogo(): void {
-    if (!isPlatformBrowser(this.idPlataforma)) {
-      return; // Não salva no servidor
-    }
-
-    try {
-      const estado = this.estadoJogo();
-      localStorage.setItem(this.CHAVE_STORAGE, JSON.stringify(estado));
-    } catch (error) {
-      console.error('Erro ao salvar jogo:', error);
-    }
-  }
-
-  /**
-   * Carrega o jogo salvo do LocalStorage
-   */
-  carregarJogo(): void {
-    if (!isPlatformBrowser(this.idPlataforma)) {
-      // No servidor, apenas inicia um novo jogo
-      this.iniciarNovoJogo(75);
-      return;
-    }
-
-    try {
-      const estadoSalvo = localStorage.getItem(this.CHAVE_STORAGE);
-      if (estadoSalvo) {
-        const estadoParseado: EstadoJogoBingo = JSON.parse(estadoSalvo);
-        // Valida o estado antes de aplicar
-        if (this.estadoValido(estadoParseado)) {
-          this.estadoJogo.set(estadoParseado);
-          return;
-        }
-      }
-    } catch (error) {
-      console.error('Erro ao carregar jogo:', error);
-    }
-
-    // Se não houver jogo salvo ou houver erro, inicia novo jogo
-    this.iniciarNovoJogo(75);
   }
 
   /**
@@ -156,8 +143,8 @@ export class BingoService {
       typeof estado.numeroMaximo === 'number' &&
       Array.isArray(estado.numeros) &&
       Array.isArray(estado.numerosSelecionados) &&
-      estado.numeroMaximo % 5 === 0 &&
-      estado.numeroMaximo >= 5 &&
+      estado.numeroMaximo % MAX_NUMERO_COLUNAS === 0 &&
+      estado.numeroMaximo >= MAX_NUMERO_COLUNAS &&
       estado.numeroMaximo <= 120
     );
   }
@@ -177,35 +164,20 @@ export class BingoService {
    */
   private organizarNumerosEmColunaBingo(numeros: number[]): number[] {
     const totalNumeros = numeros.length;
-    const numerosPerColuna = totalNumeros / 5; // 5 colunas para BINGO
+    const numerosPorColuna = totalNumeros / MAX_NUMERO_COLUNAS;
     const resultado: number[] = [];
 
     // Para cada linha (número dentro de cada coluna)
-    for (let linha = 0; linha < numerosPerColuna; linha++) {
+    for (let linha = 0; linha < numerosPorColuna; linha++) {
       // Para cada coluna
-      for (let coluna = 0; coluna < 5; coluna++) {
+      for (let coluna = 0; coluna < MAX_NUMERO_LINHAS; coluna++) {
         // Calcula o índice no array original
-        const indiceOriginal = coluna * numerosPerColuna + linha;
+        const indiceOriginal = coluna * numerosPorColuna + linha;
         resultado.push(numeros[indiceOriginal]);
       }
     }
-
     return resultado;
   }
 
-  /**
-   * Limpa o jogo salvo do LocalStorage
-   */
-  private limparJogoSalvo(): void {
-    if (!isPlatformBrowser(this.idPlataforma)) {
-      return; // Não limpa no servidor
-    }
-
-    try {
-      localStorage.removeItem(this.CHAVE_STORAGE);
-    } catch (error) {
-      console.error('Erro ao limpar jogo salvo:', error);
-    }
-  }
 }
 

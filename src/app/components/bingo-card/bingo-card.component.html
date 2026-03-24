@@ -5,7 +5,7 @@
       @for (linha of obterCartelaOrganizada(); track $index) {
         <div class="cartela-linha">
           @for (numero of linha; track $index) {
-            @if (numero === 0) {
+            @if (numero === VALOR_LOCAL_ICONE) {
               <div class="cartela-casa cartela-casa-img">
                 @if (imageUrl) {
                   <img [src]="imageUrl" alt="BINGO" />

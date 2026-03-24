@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { BingoGameComponent } from './components/bingo-game/bingo-game.component';
-import { CartelaGeneratorComponent } from './components/cartela-generator/cartela-generator.component';
+import { BingoGameComponent } from './pages/bingo-game/bingo-game.component';
+import { CartelaGeneratorComponent } from './pages/cartela-generator/cartela-generator.component';
 
 export const routes: Routes = [
   { path: '', component: BingoGameComponent },

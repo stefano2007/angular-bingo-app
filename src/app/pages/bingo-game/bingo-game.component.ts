@@ -1,12 +1,12 @@
-import { Component, Inject, PLATFORM_ID, afterNextRender, computed, inject, signal } from '@angular/core';
-import { DOCUMENT, isPlatformBrowser, CommonModule } from '@angular/common';
+import { Component, PLATFORM_ID, afterNextRender, computed, inject, signal } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BingoService } from '../../services/bingo.service';
-import { BingoBoardComponent } from '../bingo-board/bingo-board.component';
-import { BingoControlsComponent } from '../bingo-controls/bingo-controls.component';
-import { NumbersScoreboardComponent } from '../numbers-scoreboard/numbers-scoreboard.component';
-import { NUMEROS_MAXIMOS_VALIDOS, ehNumeroMaximoValido } from '../../config/bingo.config';
+import { BingoBoardComponent } from '../../components/bingo-board/bingo-board.component';
+import { BingoControlsComponent } from '../../components/bingo-controls/bingo-controls.component';
+import { NumbersScoreboardComponent } from '../../components/numbers-scoreboard/numbers-scoreboard.component';
+import { NUMEROS_MAXIMOS_VALIDOS, NUMERO_JOGAS_PADRAO, ehNumeroMaximoValido } from '../../config/bingo.config';
 
 /**
  * Componente que contém o jogo de bingo
@@ -24,11 +24,11 @@ export class BingoGameComponent {
   private platformId = inject(PLATFORM_ID);
 
   mostrarModalNovoJogo = signal(false);
-  numeroMaximoEmModal = signal(75);
-  jogoJaIniciado = computed(() => this.bingoService.estado().numerosSelecionados.length > 0);
+  numeroMaximoEmModal = signal(NUMERO_JOGAS_PADRAO);
+  jogoJaIniciado = computed(() => this.bingoService.estadoSoLeitura().numerosSelecionados.length > 0);
 
   get estadoJogo() {
-    return this.bingoService.estado;
+    return this.bingoService.estadoSoLeitura;
   }
 
   constructor() {

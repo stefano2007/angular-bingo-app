@@ -1,7 +1,7 @@
 ﻿import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NUMEROS_MAXIMOS_VALIDOS } from '../../config/bingo.config';
+import { NUMEROS_MAXIMOS_VALIDOS, NUMERO_JOGAS_PADRAO } from '../../config/bingo.config';
 
 /**
  * Componente responsável pelos controles do jogo
@@ -14,15 +14,11 @@ import { NUMEROS_MAXIMOS_VALIDOS } from '../../config/bingo.config';
   templateUrl: './bingo-controls.component.html'
 })
 export class BingoControlsComponent {
-  /**
-   * Número máximo atual do jogo
-   */
-  @Input() numeroMaximo: number = 75;
-
+  
   /**
    * Número máximo selecionado (para exibição readonly)
    */
-  @Input() numeroMaximoSelecionado: number = 75;
+  @Input() numeroMaximoSelecionado: number = NUMERO_JOGAS_PADRAO;
 
   /**
    * Número atual selecionado
@@ -37,7 +33,7 @@ export class BingoControlsComponent {
   /**
    * Quantidade total de números no jogo
    */
-  @Input() totalNumeros: number = 75;
+  @Input() totalNumeros: number = NUMERO_JOGAS_PADRAO;
 
   /**
    * Evento emitido quando o usuário deseja iniciar um novo jogo
@@ -57,14 +53,14 @@ export class BingoControlsComponent {
   /**
    * Emite evento para iniciar novo jogo usando o numeroMaximoSelecionado
    */
-  aoNovoJogo(): void {
+  criarNovoJogo(): void {
     this.novoJogo.emit(this.numeroMaximoSelecionado);
   }
 
   /**
    * Emite evento para gerar número
    */
-  aoGerarNumero(): void {
+  sortearNumero(): void {
     this.gerarNumero.emit();
   }
 

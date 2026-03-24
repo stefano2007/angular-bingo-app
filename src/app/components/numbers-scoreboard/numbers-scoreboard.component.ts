@@ -16,11 +16,4 @@ export class NumbersScoreboardComponent {
    * Array com os números já sorteados
    */
   @Input() numerosSelecionados: number[] = [];
-
-  /**
-   * Retorna os números selecionados em ordem reversa (último para primeiro)
-   */
-  get numerosSelecionadosReversos(): number[] {
-    return [...this.numerosSelecionados].reverse();
-  }
 }

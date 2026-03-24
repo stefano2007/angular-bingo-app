@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BingoCard } from '../../services/bingo-card-generator.service';
+import { MAX_NUMERO_LINHAS, MAX_NUMERO_COLUNAS, NOME_JOGO_PADRAO } from '../../config/bingo.config';
 
 /**
  * Componente que exibe uma cartela de bingo individual
@@ -13,6 +14,9 @@ import { BingoCard } from '../../services/bingo-card-generator.service';
   styleUrls: ['./bingo-card.component.css']
 })
 export class BingoCardComponent {
+
+  readonly VALOR_LOCAL_ICONE : number = -1;
+
   /**
    * Dados da cartela a ser exibida
    */
@@ -21,17 +25,12 @@ export class BingoCardComponent {
   /**
    * Nome do bingo a ser exibido no topo da cartela
    */
-  @Input() bingoName: string = 'BINGO';
+  @Input() bingoName: string = NOME_JOGO_PADRAO;
 
   /**
    * URL da imagem opcional para o centro da cartela
    */
   @Input() imageUrl: string | null = null;
-
-  /**
-   * Colunas do bingo (B, I, N, G, O)
-   */
-  readonly colunas = ['B', 'I', 'N', 'G', 'O'];
 
   /**
    * Reorganiza a cartela para exibir números em coluna
@@ -41,7 +40,6 @@ export class BingoCardComponent {
   obterCartelaOrganizada(): number[][] {
     if (!this.card) return [];
 
-    // Cria um array plano de todos os números (exceto o FREE)
     const numeros: number[] = [];
     this.card.numbers.forEach(linha => {
       linha.forEach(numero => {
@@ -52,7 +50,7 @@ export class BingoCardComponent {
     // Reorganiza em 5 colunas (B, I, N, G, O)
     const colunas: number[][] = [[], [], [], [], []];
     numeros.forEach((num, indice) => {
-      const indiceColuna = indice % 5;
+      const indiceColuna = indice % MAX_NUMERO_COLUNAS;
       colunas[indiceColuna].push(num);
     });
 
@@ -60,12 +58,12 @@ export class BingoCardComponent {
 
     // Converte de volta para linhas
     const cartelaOrganizada: number[][] = [];
-    for (let linha = 0; linha < 5; linha++) {
+    for (let linha = 0; linha < MAX_NUMERO_LINHAS; linha++) {
       const novaLinha: number[] = [];
-      for (let coluna = 0; coluna < 5; coluna++) {
+      for (let coluna = 0; coluna < MAX_NUMERO_COLUNAS; coluna++) {
         if (this.indexIcone(linha, coluna)) {
           // Centro representa a imagem
-          novaLinha.push(0);
+          novaLinha.push(this.VALOR_LOCAL_ICONE);
         } else {
           novaLinha.push(colunas[coluna][linha] || 0);
         }
@@ -76,8 +74,12 @@ export class BingoCardComponent {
     return cartelaOrganizada;
   }
 
+
+
   indexIcone(linha: number, coluna: number): boolean {
-    return linha === 2 && coluna === 2;
+    const indiceColunaFree : number = 2;
+    const indiceLinhaFree : number= 2;
+    return linha === indiceLinhaFree && coluna === indiceColunaFree;
   }
 
   ordernarColunas(colunas: number[][]): number[][] {

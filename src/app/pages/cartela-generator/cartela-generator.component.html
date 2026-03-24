@@ -14,6 +14,8 @@
           <input
             type="text"
             [(ngModel)]="bingoName"
+            (ngModelChange)="bingoName.set(bingoName().toUpperCase())"
+            [maxlength]="20"
             placeholder="ex: BINGO"
             class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800"
           />
@@ -38,7 +40,7 @@
         <!-- Quantidade -->
         <div>
           <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Quantidade de Cartelas
+            Quantidade de Cartelas (cada folha A4 imprime até 10 cartelas)
           </label>
           <input
             type="number"

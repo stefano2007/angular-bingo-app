@@ -21,24 +21,15 @@
 /* Grid de cartelas: 1 coluna para mobile */
 .cartelas-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 15px;
-  padding: 10px;
+  padding: 0;
   box-sizing: border-box;
   width: 100%;
-  max-width: 500px;
   margin: 0 auto;
   min-width: 0;
 }
 
-/* Desktop: 2 colunas */
-@media (min-width: 768px) {
-  .cartelas-grid {
-    grid-template-columns: repeat(2, 1fr);
-    max-width: 100%;
-    padding: 0;
-  }
-}
 
 .cartela-wrapper {
   display: flex;
@@ -104,6 +95,7 @@
     box-sizing: border-box;
     width: 100%;
     justify-content: center;
+    max-width: 500px;
   }
 
   .cartela-wrapper {

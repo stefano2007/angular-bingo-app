@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BingoCardGeneratorService } from '../../services/bingo-card-generator.service';
-import { BingoCardComponent } from '../bingo-card/bingo-card.component';
-import { NUMEROS_MAXIMOS_VALIDOS, ehNumeroMaximoValido, obterNumeroMaximoSelecionado } from '../../config/bingo.config';
+import { BingoCardComponent } from '../../components/bingo-card/bingo-card.component';
+import { NUMEROS_MAXIMOS_VALIDOS, NUMERO_JOGAS_PADRAO, NOME_JOGO_PADRAO, ehNumeroMaximoValido } from '../../config/bingo.config';
 import type { BingoCard } from '../../services/bingo-card-generator.service';
 
 @Component({
@@ -18,10 +18,10 @@ export class CartelaGeneratorComponent {
   private cardGeneratorService = inject(BingoCardGeneratorService);
   private activatedRoute = inject(ActivatedRoute);
 
-  bingoName = signal('BINGO');
+  bingoName = signal(NOME_JOGO_PADRAO);
   quantidade = signal(30);
   imageUrl = signal('');
-  numeroMaximo = signal(75);
+  numeroMaximo = signal(NUMERO_JOGAS_PADRAO);
   cartelas = signal<BingoCard[]>([]);
 
   // Converte para array mutável para uso no template
@@ -33,7 +33,7 @@ export class CartelaGeneratorComponent {
 
   private lerParametrosQuery(): void {
     this.activatedRoute.queryParams.subscribe((params: Record<string, string>) => {
-      const numeroMaximo = parseInt(params['numeroMaximo'] || '75', 10);
+      const numeroMaximo = parseInt(params['numeroMaximo'] || `${NUMERO_JOGAS_PADRAO}`, 10);
       if (ehNumeroMaximoValido(numeroMaximo)) {
         this.numeroMaximo.set(numeroMaximo);
       }
