@@ -1,0 +1,58 @@
+name: Deploy Angular SSG (manual) to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      # 🔥 Build SSR
+      - name: Build Angular SSR
+        run: npm run build
+
+      # 🔥 Start SSR server
+      - name: Start SSR server
+        run: |
+          node dist/bingo-app/server/server.mjs &
+          sleep 5
+
+      # 🔥 Rodar SSG manual
+      - name: Prerender pages
+        run: node prerender.mjs
+
+      # 🔥 Fix GitHub Pages routing
+      - name: Copy index to 404
+        run: cp dist/bingo-app/browser/index.html dist/bingo-app/browser/404.html
+
+      # 🔥 Upload para Pages
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/bingo-app/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        uses: actions/deploy-pages@v4
