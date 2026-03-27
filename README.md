@@ -94,11 +94,7 @@ ng test
    - O número será destacado no placar em verde
    - O jogo é salvo automaticamente após gerar cada número
 
-3. **Salvar Jogo:**
-   - Clique no botão "Salvar Jogo" para salvar manualmente o estado atual
-   - O jogo também é salvo automaticamente quando você gera um número
-
-4. **Visualizar Progresso:**
+3. **Visualizar Progresso:**
    - A barra de progresso mostra quantos números foram selecionados
    - O número atual selecionado é exibido no topo dos controles
    - Números selecionados aparecem destacados em verde no placar

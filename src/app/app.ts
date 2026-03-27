@@ -1,5 +1,5 @@
-import { Component, Inject, PLATFORM_ID, afterNextRender, inject } from '@angular/core';
-import { DOCUMENT, isPlatformBrowser, CommonModule } from '@angular/common';
+import { Component} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -13,22 +13,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './app.html'
 })
 export class App {
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    afterNextRender(() => {
-      this.aplicarTemaDark();
-    });
+  constructor() {
   }
 
-  /**
-   * Aplica tema dark na raiz da aplicação
-   */
-  private aplicarTemaDark(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const htmlElement = this.document.documentElement;
-      htmlElement.classList.add('dark');
-    }
-  }
 }
