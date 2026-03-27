@@ -21,11 +21,6 @@ export class BingoControlsComponent {
   @Input() numeroMaximoSelecionado: number = NUMERO_JOGAS_PADRAO;
 
   /**
-   * Número atual selecionado
-   */
-  @Input() numeroAtual: number | null = null;
-
-  /**
    * Quantidade de números selecionados
    */
   @Input() quantidadeSelecionados: number = 0;

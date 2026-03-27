@@ -47,11 +47,16 @@ export class CartelaGeneratorComponent {
 
   imprimir() {
     window.print();
-  } 
+  }
 
   onNumeroMaximoChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const valor = parseInt(target.value, 10);
     this.numeroMaximo.set(valor);
+  }
+
+  validarQuantidade() {
+    if (this.quantidade() > 500) this.quantidade.set(500);
+    if (this.quantidade() < 1) this.quantidade.set(1);
   }
 }
