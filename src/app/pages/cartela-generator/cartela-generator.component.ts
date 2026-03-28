@@ -46,7 +46,9 @@ export class CartelaGeneratorComponent {
   }
 
   imprimir() {
-    window.print();
+    setTimeout(() => {
+      window.print();
+    }, 500);
   }
 
   onNumeroMaximoChange(event: Event): void {
