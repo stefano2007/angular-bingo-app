@@ -86,6 +86,9 @@
     justify-content: center;
     align-items: center;
     page-break-inside: avoid;
+    break-inside: avoid;
+    -webkit-region-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
   }
 
   /* Mantém proporção */
