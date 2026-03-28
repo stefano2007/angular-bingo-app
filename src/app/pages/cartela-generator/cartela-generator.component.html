@@ -74,7 +74,7 @@
 
   <ng-container *ngTemplateOutlet="btnImprimir"></ng-container>
   <div class="print-container">
-    <div class="cartelas-grid">
+    <div class="cartelas-grid md:gap-0">
       @for (cartela of cartelas(); track cartela.id; let i = $index) {
       <div class="cartela-wrapper">
         <app-bingo-card [card]="cartela" [bingoName]="bingoName()" [imageUrl]="imageUrl()" />

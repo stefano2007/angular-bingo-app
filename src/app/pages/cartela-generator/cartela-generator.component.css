@@ -9,6 +9,10 @@
   :host {
     gap: 2rem;
   }
+
+  .cartelas-grid {
+    gap: 15px;
+  }
 }
 
 .print-container {
@@ -19,7 +23,6 @@
 .cartelas-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
   width: 100%;
   margin: 0 auto;
 }
@@ -44,7 +47,7 @@
   * {
     box-sizing: border-box;
   }
-    
+
   body {
     margin: 0;
     padding: 0;
