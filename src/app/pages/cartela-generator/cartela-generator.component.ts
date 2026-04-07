@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BingoCardGeneratorService } from '../../services/bingo-card-generator.service';
 import { BingoCardComponent } from '../../components/bingo-card/bingo-card.component';
-import { NUMEROS_MAXIMOS_VALIDOS, NUMERO_JOGAS_PADRAO, NOME_JOGO_PADRAO, ehNumeroMaximoValido } from '../../config/bingo.config';
+import { NUMEROS_MAXIMOS_VALIDOS, NUMERO_JOGAS_PADRAO, ehNumeroMaximoValido } from '../../config/bingo.config';
 import type { BingoCard } from '../../services/bingo-card-generator.service';
 
 @Component({
@@ -18,7 +18,6 @@ export class CartelaGeneratorComponent {
   private cardGeneratorService = inject(BingoCardGeneratorService);
   private activatedRoute = inject(ActivatedRoute);
 
-  bingoName = signal(NOME_JOGO_PADRAO);
   quantidade = signal(30);
   imageUrl = signal('');
   numeroMaximo = signal(NUMERO_JOGAS_PADRAO);

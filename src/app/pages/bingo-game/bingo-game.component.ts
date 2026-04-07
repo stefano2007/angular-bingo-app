@@ -27,6 +27,7 @@ export class BingoGameComponent {
   numeroMaximoEmModal = signal(NUMERO_JOGAS_PADRAO);
   jogoJaIniciado = computed(() => this.bingoService.estadoSoLeitura().numerosSelecionados.length > 0
     && this.bingoService.estadoSoLeitura().numerosSelecionados.length < this.bingoService.estadoSoLeitura().numeroMaximo);
+  numeroColuna = computed<string | null>(() => this.bingoService.obterColunaDoNumeroSorteado());
 
   get estadoJogo() {
     return this.bingoService.estadoSoLeitura;

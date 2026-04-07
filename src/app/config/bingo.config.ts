@@ -39,3 +39,8 @@ export const MAX_NUMERO_LINHAS: number = 5 as const;
  * Valores padrão de colunas para gerar os cartelas do bingo
  */
 export const MAX_NUMERO_COLUNAS: number = 5 as const;
+
+/**
+ * Cabeçalho das colunas do bingo, representando as letras B, I, N, G, O
+ */
+export const CABECALHO_COLUNAS: string[] = ['B', 'I', 'N', 'G', 'O'] as const;

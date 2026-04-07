@@ -21,4 +21,9 @@ export class NumbersScoreboardComponent {
    * Array com os números já sorteados
    */
   @Input() numerosSelecionados: number[] = [];
+
+  /**
+   * Coluna do número atual sorteado (B, I, N, G ou O)
+   */
+  @Input() numeroColuna: string | null = null;
 }

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CABECALHO_COLUNAS } from '../../config/bingo.config';
 
 /**
  * Componente responsável por exibir o placar do Bingo
@@ -51,7 +52,7 @@ export class BingoBoardComponent {
    * Retorna as letras de BINGO para o cabeçalho
    */
   obterLetras(): string[] {
-    return ['B', 'I', 'N', 'G', 'O'];
+    return CABECALHO_COLUNAS;
   }
 }
 

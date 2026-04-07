@@ -1,25 +1,31 @@
-<div class="cartela">
-  <h2 class="cartela-titulo">{{ bingoName }}</h2>
+<div class="cartela">  
+  <div class="flex cartela-titulo">
+    @for (letra of obterLetras(); track letra) {
+    <div class="cartela-titulo-casa">
+      {{ letra }}
+    </div>
+    }
+  </div>
   <div class="cartela-corpo">
     @if (card) {
       @for (linha of obterCartelaOrganizada(); track $index) {
-        <div class="cartela-linha">
-          @for (numero of linha; track $index) {
-            @if (numero === VALOR_LOCAL_ICONE) {
-              <div class="cartela-casa cartela-casa-img">
-                @if (imageUrl) {
-                  <img [src]="imageUrl" alt="BINGO" />
-                } @else {
-                  <img src="assets/bingo.png" alt="BINGO" />
-                }
-              </div>
-            } @else {
-              <div class="cartela-casa">
-                {{ numero }}
-              </div>
-            }
+      <div class="cartela-linha">
+        @for (numero of linha; track $index) {
+        @if (numero === VALOR_LOCAL_ICONE) {
+        <div class="cartela-casa cartela-casa-img">
+          @if (imageUrl) {
+          <img [src]="imageUrl" alt="BINGO" />
+          } @else {
+          <img src="assets/bingo.png" alt="BINGO" />
           }
         </div>
+        } @else {
+        <div class="cartela-casa">
+          {{ numero }}
+        </div>
+        }
+        }
+      </div>
       }
     }
   </div>

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BingoCard } from '../../services/bingo-card-generator.service';
-import { MAX_NUMERO_LINHAS, MAX_NUMERO_COLUNAS, NOME_JOGO_PADRAO } from '../../config/bingo.config';
+import { MAX_NUMERO_LINHAS, MAX_NUMERO_COLUNAS, CABECALHO_COLUNAS } from '../../config/bingo.config';
 
 /**
  * Componente que exibe uma cartela de bingo individual
@@ -21,11 +21,6 @@ export class BingoCardComponent {
    * Dados da cartela a ser exibida
    */
   @Input() card: BingoCard | null = null;
-
-  /**
-   * Nome do bingo a ser exibido no topo da cartela
-   */
-  @Input() bingoName: string = NOME_JOGO_PADRAO;
 
   /**
    * URL da imagem opcional para o centro da cartela
@@ -88,5 +83,9 @@ export class BingoCardComponent {
 
   ordernarArray(arr: number[]): number[] {
     return arr.sort((a, b) => a - b);
+  }
+
+  obterLetras(): string[] {
+    return CABECALHO_COLUNAS;
   }
 }

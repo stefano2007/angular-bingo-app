@@ -6,16 +6,6 @@
       <p class="text-gray-600 dark:text-gray-400 mb-6">Preencha os dados para gerar suas cartelas de bingo:</p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Nome do Bingo -->
-        <div>
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Nome do Bingo
-          </label>
-          <input type="text" [(ngModel)]="bingoName" (ngModelChange)="bingoName.set(bingoName().toUpperCase())"
-            [maxlength]="20" placeholder="ex: BINGO"
-            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800" />
-        </div>
-
         <!-- Número Máximo -->
         <div>
           <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -77,7 +67,7 @@
     <div class="cartelas-grid md:gap-0">
       @for (cartela of cartelas(); track cartela.id; let i = $index) {
       <div class="cartela-wrapper">
-        <app-bingo-card [card]="cartela" [bingoName]="bingoName()" [imageUrl]="imageUrl()" />
+        <app-bingo-card [card]="cartela" [imageUrl]="imageUrl()" />
       </div>
       }
     </div>

@@ -1,7 +1,7 @@
 import { Injectable, signal, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { LocalStorageDBService } from './localStorageDB.service';
-import { NUMERO_JOGAS_PADRAO, MAX_NUMERO_COLUNAS, MAX_NUMERO_LINHAS } from '../config/bingo.config'
+import { NUMERO_JOGAS_PADRAO, MAX_NUMERO_COLUNAS, MAX_NUMERO_LINHAS, CABECALHO_COLUNAS } from '../config/bingo.config'
 
 /**
  * Interface para o estado do jogo
@@ -132,6 +132,23 @@ export class BingoService {
     this.localStorageDBService.salvarJogo(this.estadoJogo());
 
     return numeroSelecionado;
+  }
+
+  obterColunaDoNumeroSorteado(): string | null {
+    const { numeroAtual, numeroMaximo } = this.estadoJogo();
+    console.log('Número atual:', numeroAtual, 'Número máximo:', numeroMaximo);
+    if (numeroAtual === null || numeroAtual < 0 || numeroAtual > numeroMaximo) {
+      return null;
+    }
+    let colunaIndex = this.calcularColuna(numeroAtual, numeroMaximo) || 0;
+    console.log('Coluna index calculada: ', colunaIndex, " coluna letra: ", CABECALHO_COLUNAS[colunaIndex - 1]);
+    return CABECALHO_COLUNAS[colunaIndex - 1] || null;
+  }
+
+  private calcularColuna(numero: number, numeroMaximo: number): number | null {
+    const numerosPorColuna = numeroMaximo / MAX_NUMERO_COLUNAS;
+    const colunaIndex = Math.ceil(numero / numerosPorColuna);
+    return colunaIndex || 0;
   }
 
   /**

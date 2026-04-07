@@ -1,19 +1,10 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   width: 100%;
 }
 
-@media (min-width: 768px) {
-  :host {
-    gap: 2rem;
-  }
 
-  .cartelas-grid {
-    gap: 15px;
-  }
-}
 
 .print-container {
   width: 100%;
@@ -48,7 +39,7 @@
     box-sizing: border-box;
   }
 
-  body {
+  html, body {
     margin: 0;
     padding: 0;
     background: white;
@@ -68,10 +59,9 @@
   .print-container {
     width: 100%;
     margin: 0;
-    padding: 10px;
+    padding: 0;
   }
 
-  /* 🚨 TROCA GRID POR FLEX (iOS FIX) */
   .cartelas-grid {
     display: flex;
     flex-wrap: wrap;
@@ -80,22 +70,17 @@
   }
 
   .cartela-wrapper {
-    width: 48%;
-    max-width: 48%;
+    width: 49%;
+    max-width: 49%;
     display: flex;
     justify-content: center;
     align-items: center;
-    page-break-inside: avoid;
-    break-inside: avoid;
-    -webkit-region-break-inside: avoid;
-    -webkit-column-break-inside: avoid;
   }
 
-  /* Mantém proporção */
   .cartela-wrapper app-bingo-card {
     width: 100%;
     height: auto;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 9;  
   }
 
 }
